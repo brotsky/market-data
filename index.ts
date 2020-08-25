@@ -1,9 +1,11 @@
 const express = require('express')
 const RequestQueue = require('node-request-queue');
 
+import cuid from 'cuid';
+
 import registerDependencies from './services/register-dependencies';
 import { NODE_PORT } from './config/vars';
-import cuid from 'cuid';
+import { DEPENDENCIES } from './utils/constants';
 
 var app = express()
 
@@ -17,7 +19,7 @@ const start = async () => {
   app.post('/security/:symbol/subscribe', async (req: any, res: any) => {
     const { symbol } = req.params;
     // container is not working
-    const securityRepository = container.get('securityRepository');
+    const securityRepository = await container.get(DEPENDENCIES.SECURITY_REPOSITORY);
     const security = await securityRepository.create({
       id: cuid(),
       symbol,

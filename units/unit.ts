@@ -14,7 +14,7 @@ async function Unit(entity: any, relations: any, db?: any) {
 
 Unit.prototype = {
   async create(data: any) {
-    const repository = await getRepository(this.entity);
+    const repository = getRepository(this.entity);
     return repository.save(data);
   },
   async createMany(items: any[]) {

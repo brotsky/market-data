@@ -5,7 +5,7 @@ function Security(db: any) {
   this.entity = SecurityEntity;
   this.relations = [];
   this.db = db;
-  Unit.call(this, this.entity, this.relations, this.db);
+  return Unit.call(this, this.entity, this.relations, this.db);
 }
 
 Security.prototype = Object.create(Unit.prototype);
