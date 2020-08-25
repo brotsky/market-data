@@ -1,5 +1,3 @@
-import DB from "../../services/DatabaseConnector";
-
 export default class Container {
   services: { [x: string]: any; };
 

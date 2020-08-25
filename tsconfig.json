@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
   },
   "include": [
     "**/*",
   ],
   "exclude": [
-      "node_modules",
-      "**/*.spec.ts"
+    "node_modules",
+    "**/*.spec.ts"
   ]
 }
