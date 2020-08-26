@@ -24,6 +24,12 @@ export default class RequestLog {
   @Column()
   expirationDate: Date;
 
+  @Column({ default: false })
+  error: boolean;
+  
+  @Column({ nullable: true })
+  status: string;
+
   @CreateDateColumn()
   createdDate: Date;
 

@@ -3,8 +3,11 @@ const RequestQueue = require('node-request-queue');
 const cuid = require('cuid')
 const axios = require('axios')
 const moment = require('moment')
+const isNil = require('lodash/isNil')
+const get = require('lodash/get')
 
 import registerDependencies from './services/register-dependencies';
+import { tipsrankService } from './services/api-requests';
 import { NODE_PORT } from './config/vars';
 import { DEPENDENCIES, DATA_PROVIDERS } from './utils/constants';
 
@@ -13,7 +16,6 @@ var app = express()
 const start = async () => {
   const container = await registerDependencies()
   const securityRepository = container.get(DEPENDENCIES.SECURITY_REPOSITORY)
-  const requestLogRepository = container.get(DEPENDENCIES.REQUEST_LOG_REPOSITORY)
 
   app.get('/', async (req: any, res: any) => {
     const securities = await securityRepository.get({})
@@ -28,59 +30,11 @@ const start = async () => {
       id: cuid(),
       symbol,
     })
+    const securityId = security.id;
 
-    const getChartPageData = async (symbol: string) => {
-      const key = `${DATA_PROVIDERS.TIPSRANK}:getChartPageData/?ticker=${symbol}&benchmark=1&period=2`;
+    const stockData = await tipsrankService.getStockData(container, symbol, securityId);
+    const chartPageData = await tipsrankService.getChartPageData(container, symbol, securityId);
 
-      // return cache found in database
-      const cache = await requestLogRepository.getOne({
-        key,
-      }, {
-        "RequestLog.expirationDate": "DESC"
-      });
-      if (cache && moment().isBefore(cache.expirationDate)) {
-        return cache.value;
-      }
-
-      const response = await axios.get(`https://www.tipranks.com/api/stocks/getChartPageData/?ticker=${symbol}&benchmark=1&period=2`);
-      const { data } = response;
-      await requestLogRepository.create({
-        id: cuid(),
-        key,
-        value: data,
-        expirationDate: moment().add(1, 'day'),
-        security: security.id,
-      })
-      return data;
-    }
-
-    const getStockData = async (symbol: string) => {
-      const key = `${DATA_PROVIDERS.TIPSRANK}:getData/?name=${symbol}&benchmark=1&period=3`;
-
-      // return cache found in database
-      const cache = await requestLogRepository.getOne({
-        key,
-      }, {
-        "RequestLog.expirationDate": "DESC"
-      });
-      if (cache && moment().isBefore(cache.expirationDate)) {
-        return cache.value;
-      }
-
-      const response = await axios.get(`https://www.tipranks.com/api/stocks/getData/?name=${symbol}&benchmark=1&period=3`);
-      const { data } = response;
-      await requestLogRepository.create({
-        id: cuid(),
-        key,
-        value: data,
-        expirationDate: moment().add(1, 'day'),
-        security: security.id,
-      })
-      return data;
-    }
-
-    const stockData = await getStockData(symbol);
-    const chartPageData = await getChartPageData(symbol);
     const tipsrank = {
       stockData,
       chartPageData,
