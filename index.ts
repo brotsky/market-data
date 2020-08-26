@@ -1,37 +1,127 @@
 const express = require('express')
 const RequestQueue = require('node-request-queue');
-
 const cuid = require('cuid')
+const axios = require('axios')
+const moment = require('moment')
 
 import registerDependencies from './services/register-dependencies';
 import { NODE_PORT } from './config/vars';
-import { DEPENDENCIES } from './utils/constants';
+import { DEPENDENCIES, DATA_PROVIDERS } from './utils/constants';
 
 var app = express()
 
-console.log('THING', cuid())
-
 const start = async () => {
-  const container = await registerDependencies();
+  const container = await registerDependencies()
+  const securityRepository = container.get(DEPENDENCIES.SECURITY_REPOSITORY)
+  const requestLogRepository = container.get(DEPENDENCIES.REQUEST_LOG_REPOSITORY)
 
-  app.get('/', (req: any, res: any) => {
-    res.send('hello world')
+  app.get('/', async (req: any, res: any) => {
+    const securities = await securityRepository.get({})
+    res.send({ securities })
   })
 
-  app.get('/security/:symbol/subscribe', async (req: any, res: any) => {
+  app.get('/security/:symbol', async (req: any, res: any) => {
     const { symbol } = req.params;
-    // container is not working
-    const securityRepository = container.get(DEPENDENCIES.SECURITY_REPOSITORY);
-    console.log("DEBUG", securityRepository)
-    const security = await securityRepository.create({
+
+    const existingSecurity = await securityRepository.getOne({ symbol });
+    const security = existingSecurity ? existingSecurity : await securityRepository.create({
       id: cuid(),
       symbol,
     })
-    res.send(security)
+
+    const getChartPageData = async (symbol: string) => {
+      const key = `${DATA_PROVIDERS.TIPSRANK}:getChartPageData/?ticker=${symbol}&benchmark=1&period=2`;
+
+      // return cache found in database
+      const cache = await requestLogRepository.getOne({
+        key,
+      }, {
+        "RequestLog.expirationDate": "DESC"
+      });
+      if (cache && moment().isBefore(cache.expirationDate)) {
+        return cache.value;
+      }
+
+      const response = await axios.get(`https://www.tipranks.com/api/stocks/getChartPageData/?ticker=${symbol}&benchmark=1&period=2`);
+      const { data } = response;
+      await requestLogRepository.create({
+        id: cuid(),
+        key,
+        value: data,
+        expirationDate: moment().add(1, 'day'),
+        security: security.id,
+      })
+      return data;
+    }
+
+    const getStockData = async (symbol: string) => {
+      const key = `${DATA_PROVIDERS.TIPSRANK}:getData/?name=${symbol}&benchmark=1&period=3`;
+
+      // return cache found in database
+      const cache = await requestLogRepository.getOne({
+        key,
+      }, {
+        "RequestLog.expirationDate": "DESC"
+      });
+      if (cache && moment().isBefore(cache.expirationDate)) {
+        return cache.value;
+      }
+
+      const response = await axios.get(`https://www.tipranks.com/api/stocks/getData/?name=${symbol}&benchmark=1&period=3`);
+      const { data } = response;
+      await requestLogRepository.create({
+        id: cuid(),
+        key,
+        value: data,
+        expirationDate: moment().add(1, 'day'),
+        security: security.id,
+      })
+      return data;
+    }
+
+    const stockData = await getStockData(symbol);
+    const chartPageData = await getChartPageData(symbol);
+    const tipsrank = {
+      stockData,
+      chartPageData,
+    };
+    return res.send({ tipsrank })
+  })
+
+  app.post('/security/:symbol/subscribe', async (req: any, res: any) => {
+    const { symbol } = req.params;
+    const active = true; 
+    const existingSecurity = await securityRepository.getOne({ symbol });
+    if (existingSecurity) {
+      const updatedSecurity = await securityRepository.update(existingSecurity, { active })
+      return res.send(updatedSecurity);
+    }
+    const security = await securityRepository.create({
+      id: cuid(),
+      symbol,
+      active,
+    })
+    return res.send(security)
+  })
+
+  app.post('/security/:symbol/unsubscribe', async (req: any, res: any) => {
+    const { symbol } = req.params;
+    const active = false;
+    const existingSecurity = await securityRepository.getOne({ symbol });
+    if (existingSecurity) {
+      const updatedSecurity = await securityRepository.update(existingSecurity, { active })
+      return res.send(updatedSecurity);
+    }
+    const security = await securityRepository.create({
+      id: cuid(),
+      symbol,
+      active,
+    })
+    return res.send(security)
   })
 
   app.listen(NODE_PORT, () => {
-    console.log(`Example app listening at http://localhost:${NODE_PORT}`)
+    console.log(`Market Data Service listening at http://localhost:${NODE_PORT}`)
   })
 }
 

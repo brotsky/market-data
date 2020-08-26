@@ -3,6 +3,7 @@ import Container from '../lib/di/Container';
 import DB from './DatabaseConnector';
 
 import SecurityRepository from '../units/security';
+import RequestLogRepository from '../units/request-log';
 
 import { DATABASE_OPTIONS } from '../config/vars';
 import { DEPENDENCIES } from '../utils/constants';
@@ -17,6 +18,7 @@ export default async () => {
 
   container.register('DB', db);
   container.register(DEPENDENCIES.SECURITY_REPOSITORY, new SecurityRepository(db));
+  container.register(DEPENDENCIES.REQUEST_LOG_REPOSITORY, new RequestLogRepository(db));
 
   return container;
 };
