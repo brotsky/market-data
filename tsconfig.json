@@ -8,6 +8,8 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
+    "outDir": "./build",
+    "rootDir": "./src",
   },
   "include": [
     "*",
