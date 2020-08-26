@@ -6,7 +6,7 @@ import sqlHelper from '../utils/sql-helper';
 
 const { createSqlFilter } = sqlHelper;
 
-async function Unit(entity: any, relations: any, db?: any) {
+function Unit(entity: any, relations: any, db?: any) {
   this.entity = entity;
   this.relations = relations;
   this.db = db;
@@ -155,7 +155,7 @@ Unit.prototype = {
     relations.forEach(({ name, alias }: any) => result.leftJoin(name, alias));
     return result;
   },
-  async rawToObject (raw: any) {
+  async rawToObject(raw: any) {
     const connection = await getConnection();
     const metadatas = connection.getMetadata(this.entity).columns;
 

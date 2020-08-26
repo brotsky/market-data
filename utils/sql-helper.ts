@@ -1,5 +1,5 @@
-import { find, isEmpty } from 'lodash';
-import flatten from 'flat';
+const { find, isEmpty } = require('lodash');
+const flatten = require('flat');
 
 import miscellaneous from './miscellaneous';
 
