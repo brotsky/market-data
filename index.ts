@@ -1,15 +1,11 @@
-const express = require('express')
-const RequestQueue = require('node-request-queue');
-const cuid = require('cuid')
-const axios = require('axios')
-const moment = require('moment')
-const isNil = require('lodash/isNil')
-const get = require('lodash/get')
+import * as express from 'express';
+import * as RequestQueue from 'node-request-queue';
+import cuid from 'cuid';
 
 import registerDependencies from './services/register-dependencies';
 import { tipsrankService } from './services/api-requests';
 import { NODE_PORT } from './config/vars';
-import { DEPENDENCIES, DATA_PROVIDERS } from './utils/constants';
+import { DEPENDENCIES } from './utils/constants';
 
 var app = express()
 

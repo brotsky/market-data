@@ -1,8 +1,7 @@
-const cuid = require('cuid')
-const axios = require('axios')
-const moment = require('moment')
-const isNil = require('lodash/isNil')
-const get = require('lodash/get')
+import cuid from 'cuid'
+import axios from 'axios'
+import moment from 'moment'
+import get from 'lodash/get'
 
 import { DEPENDENCIES } from '../../utils/constants';
 

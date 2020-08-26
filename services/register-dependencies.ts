@@ -1,4 +1,4 @@
-const httpContext = require('express-cls-hooked');
+import httpContext from 'express-cls-hooked';
 import Container from '../lib/di/Container';
 import DB from './DatabaseConnector';
 
