@@ -18,7 +18,7 @@ const start = async () => {
   const securityRepository = container.get(DEPENDENCIES.SECURITY_REPOSITORY)
 
   app.get('/', async (req: any, res: any) => {
-    const securities = await securityRepository.get({})
+    const securities = await securityRepository.get({ take: 1000 })
     res.send({ securities })
   })
 

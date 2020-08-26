@@ -4,7 +4,7 @@ const moment = require('moment')
 const isNil = require('lodash/isNil')
 const get = require('lodash/get')
 
-import { DEPENDENCIES, DATA_PROVIDERS } from '../../utils/constants';
+import { DEPENDENCIES } from '../../utils/constants';
 
 export const apiRequest = async (container: any, key: string, url: string, securityId: string) => {
   const requestLogRepository = container.get(DEPENDENCIES.REQUEST_LOG_REPOSITORY)
