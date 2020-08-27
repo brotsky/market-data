@@ -1,6 +1,6 @@
 import cuid from 'cuid'
 import axios from 'axios'
-import moment from 'moment'
+import * as moment from 'moment'
 import get from 'lodash/get'
 
 import { DEPENDENCIES } from '../../utils/constants';
