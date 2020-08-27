@@ -65,11 +65,41 @@ const start = async () => {
   })
 
   app.get('/lists/topTipsRankStocks', async (req: any, res: any) => {
+    let data = [];
+    let extraData = [];
     const screenerGetStocksList = await tipsrankService.screenerGetStocksList(container, 1);
     const { count } = screenerGetStocksList;
     const pageCount = Math.ceil(count / 20);
-    console.log('pageCount', pageCount);
-    return res.send(screenerGetStocksList)
+    data = [
+      ...data,
+      ...screenerGetStocksList.data,
+    ];
+    extraData = [
+      ...extraData,
+      ...screenerGetStocksList.extraData,
+    ];
+    const promises = [];
+    if (pageCount > 1) {
+      for(let page = 2; page <= pageCount; page++) {
+        promises.push(tipsrankService.screenerGetStocksList(container, page))
+      }
+      const all = await Promise.all(promises);
+      all.forEach(list => {
+        data = [
+          ...data,
+          ...list.data,
+        ];
+        extraData = [
+          ...extraData,
+          ...list.extraData,
+        ];
+      });
+    }
+    return res.send({
+      data,
+      count,
+      extraData
+    })
   })
 
   app.listen(NODE_PORT, () => {
