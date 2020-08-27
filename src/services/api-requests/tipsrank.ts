@@ -76,7 +76,7 @@ export const getStockDetailsAsync = (container: any, symbol: string, securityId:
   return apiRequest(container, key, url, securityId, cacheExpirationDate);
 }
 
-export const allTipsrank = async (container: any, symbol: string, securityId: string) => {
+export const allTipsRankForSecurity = async (container: any, symbol: string, securityId: string) => {
   const _getStockData = await getStockData(container, symbol, securityId);
   const _getChartPageData = await getChartPageData(container, symbol, securityId);
   const _crowdPublicPortfolios = await crowdPublicPortfolios(container, symbol, securityId);
@@ -100,3 +100,10 @@ export const allTipsrank = async (container: any, symbol: string, securityId: st
     getStockDetailsAsync: _getStockDetailsAsync,
   }
 }
+
+export const screenerGetStocksList = (container: any, page: number, tipranksScore: number = 5) => {
+  const ts = Date.now();
+  const key = `${DATA_PROVIDERS.TIPSRANK}:screenerGetStocksList/?page=${page}&tipranksScore=${tipranksScore}`;
+  const url = `${DATA_PROVIDERS.TIPSRANK_API_URL}/Screener/GetStocks/?break=${ts}&page=${page}&sortBy=1&sortDir=2&tipranksScore=${tipranksScore}`;
+  return apiRequest(container, key, url);
+};

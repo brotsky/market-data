@@ -28,7 +28,7 @@ const start = async () => {
     })
     const securityId = security.id;
 
-    const tipsrank = await tipsrankService.allTipsrank(container, symbol, securityId);
+    const tipsrank = await tipsrankService.allTipsRankForSecurity(container, symbol, securityId);
     return res.send({ tipsrank })
   })
 
@@ -62,6 +62,14 @@ const start = async () => {
       active,
     })
     return res.send(security)
+  })
+
+  app.get('/lists/topTipsRankStocks', async (req: any, res: any) => {
+    const screenerGetStocksList = await tipsrankService.screenerGetStocksList(container, 1);
+    const { count } = screenerGetStocksList;
+    const pageCount = Math.ceil(count / 20);
+    console.log('pageCount', pageCount);
+    return res.send(screenerGetStocksList)
   })
 
   app.listen(NODE_PORT, () => {

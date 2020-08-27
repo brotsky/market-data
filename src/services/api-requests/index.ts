@@ -9,7 +9,8 @@ import {
   getHistoricalPriceExtended,
   getRealTimeQuotes,
   getStockDetailsAsync,
-  allTipsrank,
+  allTipsRankForSecurity,
+  screenerGetStocksList,
 } from './tipsrank';
 
 export const tipsrankService = {
@@ -23,5 +24,6 @@ export const tipsrankService = {
   getHistoricalPriceExtended,
   getRealTimeQuotes,
   getStockDetailsAsync,
-  allTipsrank,
+  allTipsRankForSecurity,
+  screenerGetStocksList,
 };

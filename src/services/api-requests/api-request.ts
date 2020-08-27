@@ -5,7 +5,7 @@ import { get, isNil } from 'lodash'
 
 import { DEPENDENCIES } from '../../utils/constants';
 
-export const apiRequest = async (container: any, key: string, url: string, securityId: string, cacheExpirationDate: any = null) => {
+export const apiRequest = async (container: any, key: string, url: string, securityId: string = null, cacheExpirationDate: any = null) => {
   const requestLogRepository = container.get(DEPENDENCIES.REQUEST_LOG_REPOSITORY)
   const cache = await requestLogRepository.getOne({
     key,
