@@ -8,4 +8,5 @@ export const DEPENDENCIES = {
 export const DATA_PROVIDERS = {
   TIPSRANK: 'tipsrank',
   TIPSRANK_API_URL: 'https://www.tipranks.com/api',
+  TIPSRANK_MARKET_API_URL: 'https://market.tipranks.com/api',
 };

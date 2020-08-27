@@ -2,8 +2,6 @@ require('dotenv').config();
 import * as path from 'path';
 import * as url from 'url';
 
-console.log('process', process.env)
-
 export const NODE_PORT = process.env.PORT || 1000;
 
 const DATABASE_URL = process.env.DATABASE_URL || 'postgres://username:password@localhost:5432/market-data'

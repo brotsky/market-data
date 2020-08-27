@@ -28,13 +28,7 @@ const start = async () => {
     })
     const securityId = security.id;
 
-    const stockData = await tipsrankService.getStockData(container, symbol, securityId);
-    const chartPageData = await tipsrankService.getChartPageData(container, symbol, securityId);
-
-    const tipsrank = {
-      stockData,
-      chartPageData,
-    };
+    const tipsrank = await tipsrankService.allTipsrank(container, symbol, securityId);
     return res.send({ tipsrank })
   })
 
