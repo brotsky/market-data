@@ -16,6 +16,6 @@ export const DATABASE_OPTIONS = {
   database: db_url.path.slice(1),
   synchronize: true,
   logging: false,
-  entities: [path.join(__dirname, '../entities/**/*.ts')],
+  entities: [path.join(__dirname, '../entities/*.{js,ts}')],
   ssl: true
 };
