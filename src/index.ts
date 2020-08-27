@@ -3,7 +3,7 @@ import * as RequestQueue from 'node-request-queue';
 import * as cuid from 'cuid';
 
 import registerDependencies from './services/register-dependencies';
-import { tipsrankService } from './services/api-requests';
+import { tipsrankService, iexcloudService } from './services/api-requests';
 import { NODE_PORT } from './config/vars';
 import { DEPENDENCIES } from './utils/constants';
 
@@ -29,7 +29,12 @@ const start = async () => {
     const securityId = security.id;
 
     const tipsrank = await tipsrankService.allTipsRankForSecurity(container, symbol, securityId);
-    return res.send({ tipsrank })
+    const iexcloud = await iexcloudService.allIexcloudForSecurity(container, symbol, securityId);
+    
+    return res.send({
+      tipsrank,
+      iexcloud
+    })
   })
 
   app.get('/security/:symbol/subscribe', async (req: any, res: any) => {

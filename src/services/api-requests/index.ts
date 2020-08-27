@@ -12,6 +12,10 @@ import {
   allTipsRankForSecurity,
   screenerGetStocksList,
 } from './tipsrank';
+import {
+  stockBook,
+  allIexcloudForSecurity,
+} from './iexcloud';
 
 export const tipsrankService = {
   getStockData,
@@ -26,4 +30,9 @@ export const tipsrankService = {
   getStockDetailsAsync,
   allTipsRankForSecurity,
   screenerGetStocksList,
+};
+
+export const iexcloudService = {
+  stockBook,
+  allIexcloudForSecurity,
 };

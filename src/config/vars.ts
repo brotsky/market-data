@@ -2,6 +2,10 @@ require('dotenv').config();
 import * as path from 'path';
 import * as url from 'url';
 
+export const NODE_ENV = process.env.NODE_ENV || 'production';
+
+export const isProduction = NODE_ENV === 'production';
+
 export const NODE_PORT = process.env.PORT || 1000;
 
 const DATABASE_URL = process.env.DATABASE_URL || 'postgres://username:password@localhost:5432/market-data'
@@ -17,5 +21,7 @@ export const DATABASE_OPTIONS = {
   synchronize: true,
   logging: false,
   entities: [path.join(__dirname, '../entities/*.{js,ts}')],
-  ssl: true
+  ssl: true,
 };
+
+export const IEXCLOUD_API_KEY = isProduction ? process.env.IEXCLOUD_PRODUCTION_API_KEY : process.env.IEXCLOUD_SANDBOX_API_KEY;
