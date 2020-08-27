@@ -32,7 +32,7 @@ const start = async () => {
     return res.send({ tipsrank })
   })
 
-  app.post('/security/:symbol/subscribe', async (req: any, res: any) => {
+  app.get('/security/:symbol/subscribe', async (req: any, res: any) => {
     const { symbol } = req.params;
     const active = true; 
     const existingSecurity = await securityRepository.getOne({ symbol });
@@ -48,7 +48,7 @@ const start = async () => {
     return res.send(security)
   })
 
-  app.post('/security/:symbol/unsubscribe', async (req: any, res: any) => {
+  app.get('/security/:symbol/unsubscribe', async (req: any, res: any) => {
     const { symbol } = req.params;
     const active = false;
     const existingSecurity = await securityRepository.getOne({ symbol });
