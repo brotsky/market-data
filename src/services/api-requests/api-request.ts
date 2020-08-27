@@ -1,11 +1,11 @@
 import * as cuid from 'cuid'
 import axios from 'axios'
 import * as moment from 'moment'
-import { get } from 'lodash'
+import { get, isNil } from 'lodash'
 
 import { DEPENDENCIES } from '../../utils/constants';
 
-export const apiRequest = async (container: any, key: string, url: string, securityId: string) => {
+export const apiRequest = async (container: any, key: string, url: string, securityId: string, cacheExpirationDate: any = null) => {
   const requestLogRepository = container.get(DEPENDENCIES.REQUEST_LOG_REPOSITORY)
   const cache = await requestLogRepository.getOne({
     key,
@@ -22,7 +22,9 @@ export const apiRequest = async (container: any, key: string, url: string, secur
   const value = get(apiRequest, 'data', null);
   const status = get(apiRequest, 'response.status', 200)
   const error = status !== 200;
-  const expirationDate = error ? moment().add(1, 'hour') : moment().add(1, 'day');
+  let expirationDate = moment().add(1, 'day');
+  if (error) expirationDate = moment().add(1, 'hour');
+  if (!isNil(cacheExpirationDate)) expirationDate = moment(cacheExpirationDate);
 
   await requestLogRepository.create({
     id: cuid(),

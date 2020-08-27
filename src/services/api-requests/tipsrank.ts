@@ -1,3 +1,5 @@
+import * as moment from 'moment'
+
 import { DATA_PROVIDERS } from '../../utils/constants';
 import { apiRequest } from './api-request';
 
@@ -60,16 +62,18 @@ export const getHistoricalPriceExtended = (container: any, symbol: string, secur
 
 export const getRealTimeQuotes = (container: any, symbol: string, securityId: string) => {
   const ts = Date.now();
+  const cacheExpirationDate = moment().add(5, 'minutes');
   const key = `${DATA_PROVIDERS.TIPSRANK}:details/GetRealTimeQuotes/?tickers=${symbol}`;
   const url = `${DATA_PROVIDERS.TIPSRANK_MARKET_API_URL}/details/GetRealTimeQuotes/?tickers=${symbol}&break=${ts}`;
-  return apiRequest(container, key, url, securityId);
+  return apiRequest(container, key, url, securityId, cacheExpirationDate);
 }
 
 export const getStockDetailsAsync = (container: any, symbol: string, securityId: string) => {
   const ts = Date.now();
+  const cacheExpirationDate = moment().add(5, 'minutes');
   const key = `${DATA_PROVIDERS.TIPSRANK}:details/getstockdetailsasync/?tickers=${symbol}`;
   const url = `${DATA_PROVIDERS.TIPSRANK_MARKET_API_URL}/details/getstockdetailsasync/?id=${symbol}&break=${ts}`;
-  return apiRequest(container, key, url, securityId);
+  return apiRequest(container, key, url, securityId, cacheExpirationDate);
 }
 
 export const allTipsrank = async (container: any, symbol: string, securityId: string) => {
