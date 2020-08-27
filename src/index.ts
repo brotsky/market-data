@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as RequestQueue from 'node-request-queue';
-import cuid from 'cuid';
+import * as cuid from 'cuid';
 
 import registerDependencies from './services/register-dependencies';
 import { tipsrankService } from './services/api-requests';

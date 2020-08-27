@@ -1,6 +1,8 @@
 require('dotenv').config();
-const path = require('path');
-const url = require('url');
+import * as path from 'path';
+import * as url from 'url';
+
+console.log('process', process.env)
 
 export const NODE_PORT = process.env.PORT || 1000;
 

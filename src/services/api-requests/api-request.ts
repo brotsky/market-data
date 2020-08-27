@@ -1,7 +1,7 @@
-import cuid from 'cuid'
+import * as cuid from 'cuid'
 import axios from 'axios'
 import * as moment from 'moment'
-import get from 'lodash/get'
+import { get } from 'lodash'
 
 import { DEPENDENCIES } from '../../utils/constants';
 
