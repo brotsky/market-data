@@ -6,6 +6,7 @@ import registerDependencies from './services/register-dependencies';
 import { tipsrankService, iexcloudService } from './services/api-requests';
 import { NODE_PORT } from './config/vars';
 import { DEPENDENCIES } from './utils/constants';
+import { allCalculations } from './utils/calculations';
 
 var app = express()
 
@@ -30,10 +31,12 @@ const start = async () => {
 
     const tipsrank = await tipsrankService.allTipsRankForSecurity(container, symbol, securityId);
     const iexcloud = await iexcloudService.allIexcloudForSecurity(container, symbol, securityId);
+    const calculations = allCalculations(tipsrank, iexcloud);
     
     return res.send({
       tipsrank,
-      iexcloud
+      iexcloud,
+      calculations,
     })
   })
 
