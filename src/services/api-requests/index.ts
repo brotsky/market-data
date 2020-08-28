@@ -14,6 +14,8 @@ import {
 } from './tipsrank';
 import {
   stockBook,
+  stockChart5day,
+  timeSeriesReportedFinancials,
   allIexcloudForSecurity,
 } from './iexcloud';
 
@@ -34,5 +36,7 @@ export const tipsrankService = {
 
 export const iexcloudService = {
   stockBook,
+  stockChart5day,
+  timeSeriesReportedFinancials,
   allIexcloudForSecurity,
 };
