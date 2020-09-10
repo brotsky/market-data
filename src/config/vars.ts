@@ -8,6 +8,8 @@ export const isProduction = NODE_ENV === 'production';
 
 export const NODE_PORT = process.env.PORT || 1000;
 
+console.log('process.env.DATABASE_URL', process.env.DATABASE_URL)
+
 const DATABASE_URL = process.env.DATABASE_URL || 'postgres://username:password@localhost:5432/market-data'
 
 const db_url = url.parse(DATABASE_URL);
